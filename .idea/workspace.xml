@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f07efb30-2ef1-41f9-aff3-1cc606d73ca7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/configuration/AppConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/configuration/WebConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/dto/CourseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/dto/ExamDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/dto/StudentAnswerDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/dto/UserDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/entities/Exam.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/entities/StudentAnswer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/repository/ExamRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/services/ExamService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/E-Learning-Microservices-Project.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/user_service.main.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/exam_service/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/exam_service/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/controllers/ExamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/exam_service/src/main/java/micro/exam_service/controllers/ExamController.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/course_service">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/exam_service">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/gateway">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/payment_service">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/servicediscovery">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/user_service">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2zSWXpjpmcpOpE2PwLFlbHqcHGG" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "jdk.selected.JAVA_MODULE": "21",
+    "last_opened_file_path": "D:/UN/DS/E-Learning-Microservices-Project",
+    "onboarding.tips.debug.path": "D:/UN/DS/E-Learning-Microservices-Project/course_service/course_service/src/Main.java",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f07efb30-2ef1-41f9-aff3-1cc606d73ca7" name="Changes" comment="" />
+      <created>1751724996914</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1751724996914</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

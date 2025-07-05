@@ -10,5 +10,13 @@
         <module name="user_service.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="exam_service" target="21" />
+      <module name="exam_service.main" target="21" />
+      <module name="exam_service.test" target="21" />
+      <module name="gateway" target="21" />
+      <module name="gateway.main" target="21" />
+      <module name="gateway.test" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>
