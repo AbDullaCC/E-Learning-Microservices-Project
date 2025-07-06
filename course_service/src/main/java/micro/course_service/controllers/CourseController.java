@@ -47,11 +47,11 @@ public class CourseController {
 
     @PostMapping("/enroll/{courseId}")
     public ResponseEntity<PaymentResponse> enrollInCourse(
-            @PathVariable Long courseId
-//            @RequestHeader String token,
-//            @RequestAttribute("userId") Long userId
+            @PathVariable Long courseId,
+            @RequestHeader String token,
+            @RequestAttribute("userId") Long userId
     ){
-        return courseService.enrollInCourse(courseId, 1L);
+        return courseService.enrollInCourse(courseId, userId, token);
 
     }
 
