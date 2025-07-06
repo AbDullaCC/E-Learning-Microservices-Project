@@ -37,8 +37,8 @@ public class StudentAnswerController {
     }
 
     @GetMapping("/exam/{examId}")
-    public ResponseEntity<List<StudentAnswerDTO>> getAnswersForExamById(@PathVariable("examId") Long examId) {
-        List<StudentAnswerDTO> studentsAnswers = studentAnswerService.getStudentsAnswers(examId);
+    public ResponseEntity<List<StudentAnswerDTO>> getAnswersForExamById(@PathVariable("examId") Long examId, @RequestAttribute("role") String role) {
+        List<StudentAnswerDTO> studentsAnswers = studentAnswerService.getStudentsAnswers(examId, role);
         return new ResponseEntity<>(studentsAnswers, HttpStatus.CREATED);
     }
 }

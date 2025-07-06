@@ -77,7 +77,12 @@ public class StudentAnswerService {
         return dto;
     }
 
-    public List<StudentAnswerDTO> getStudentsAnswers(Long examId){
+    public List<StudentAnswerDTO> getStudentsAnswers(Long examId, String role){
+        if(!Objects.equals(role, "INSTRUCTOR")){
+            throw new RuntimeException("You have to be Instructor to view the answers" );
+        }
+        LOGGER.info("Attempting to view the answers: {}", examId);
+
         List<StudentAnswer> studentAnswers= studentAnswerRepository.findAllByExamId(examId);
         List<StudentAnswerDTO> studentAnswerDTOS= new ArrayList<>();
         for (StudentAnswer ans : studentAnswers) {
