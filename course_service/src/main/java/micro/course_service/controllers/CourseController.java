@@ -41,8 +41,8 @@ public class CourseController {
     }
 
     @GetMapping("/pending")
-    public ResponseEntity<List<CourseDTO>> getPendingCourses() {
-        return ResponseEntity.ok(courseService.getPendingCourses());
+    public ResponseEntity<List<CourseDTO>> getPendingCourses(@RequestAttribute("role") String role) {
+        return ResponseEntity.ok(courseService.getPendingCourses(role));
     }
 
     @PostMapping("/enroll/{courseId}")
