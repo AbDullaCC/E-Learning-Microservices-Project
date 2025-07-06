@@ -15,6 +15,8 @@ import micro.course_service.repositories.CourseUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -112,7 +114,7 @@ public class CourseService {
     }
 
     @CircuitBreaker(name = "PAYMENT_SERVICE_CIRCUIT_BREAKER", fallbackMethod = "fallbackEnrollInCourse")
-    public ResponseEntity<PaymentResponse> enrollInCourse(Long courseId, Long userId) {
+    public ResponseEntity<PaymentResponse> enrollInCourse(Long courseId, Long userId, String token) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found with ID: " + courseId));
 
@@ -120,8 +122,15 @@ public class CourseService {
             throw new RuntimeException("User with ID " + userId + " is already enrolled in course with ID " + courseId);
         }
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", token); // Example: Add an Authorization header
+        headers.add(HttpHeaders.CONTENT_TYPE, "application/json"); // Often set automatically, but good to be explicit
+
+// 2. Create an HttpEntity object, combining your request body and headers
         PaymentRequest paymentRequest = new PaymentRequest(userId, courseId, Double.parseDouble(course.getPrice().toString()));
-        ResponseEntity<PaymentResponse> response = restTemplate.postForEntity("http://payment-service/paymentService/api/payments/create",paymentRequest, PaymentResponse.class);
+
+        HttpEntity<PaymentRequest> requestEntity = new HttpEntity<>(paymentRequest, headers);
+        ResponseEntity<PaymentResponse> response = restTemplate.postForEntity("http://payment-service/paymentService/api/payments/create",requestEntity, PaymentResponse.class);
         if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null)
             return null;
 
@@ -131,8 +140,8 @@ public class CourseService {
         return ResponseEntity.ok(response.getBody());
     }
 
-    public ResponseEntity<PaymentResponse> fallbackEnrollInCourse(Long courseId, Long userId, Throwable throwable){
-        return ResponseEntity.status(400).body(PaymentResponse()) ;
+    public ResponseEntity<PaymentResponse> fallbackEnrollInCourse(Long courseId, Long userId, String token, Throwable throwable){
+        return ResponseEntity.status(500).body(new PaymentResponse(null,null,null,null,null)) ;
     }
 
     public List<CourseDTO> getEnrolledCoursesByUserId(Long userId) {
