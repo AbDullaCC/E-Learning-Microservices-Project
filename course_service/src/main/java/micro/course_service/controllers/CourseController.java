@@ -21,8 +21,8 @@ public class CourseController {
     private CourseService courseService;
 
     @PostMapping
-    public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CreateCourseDTO createCourseDTO) {
-        CourseDTO createdCourse = courseService.createCourse(createCourseDTO, 2L);
+    public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CreateCourseDTO createCourseDTO, @RequestAttribute("role") String role) {
+        CourseDTO createdCourse = courseService.createCourse(createCourseDTO, 2L, role);
         return new ResponseEntity<>(createdCourse, HttpStatus.CREATED);
     }
 

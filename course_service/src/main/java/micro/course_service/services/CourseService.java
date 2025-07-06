@@ -11,6 +11,8 @@ import micro.course_service.entities.Course;
 import micro.course_service.entities.CourseUser;
 import micro.course_service.repositories.CourseRepository;
 import micro.course_service.repositories.CourseUserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,6 +36,8 @@ public class CourseService {
 
     @Autowired
     private CourseUserRepository courseUserRepository;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CourseService.class);
 
     @CircuitBreaker(name = "USER_SERVICE_CIRCUIT_BREAKER", fallbackMethod = "fallbackGetCourseById")
     public CourseWithTeacherDTO getCourseById(Long id) {
@@ -50,7 +55,12 @@ public class CourseService {
         return new CourseWithTeacherDTO(id, course.getName(), course.getPrice(), course.getDescription(), SessionDTO.listToDTO(course.getSessions()), null);
     }
 
-    public CourseDTO createCourse(CreateCourseDTO createCourseDTO, Long teacherId) {
+    public CourseDTO createCourse(CreateCourseDTO createCourseDTO, Long teacherId, String role) {
+        if(!Objects.equals(role, "INSTRUCTOR")){
+            throw new RuntimeException("You have to be Instructor to create a course" );
+        }
+        LOGGER.info("Attempting to create a course");
+
         // Convert DTO to Entity
         Course course = new Course(
                 teacherId,
