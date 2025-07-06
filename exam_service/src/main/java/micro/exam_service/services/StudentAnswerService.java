@@ -16,6 +16,9 @@ import org.springframework.web.client.RestTemplate;
 import micro.exam_service.dto.SingleStudentAnswerDTO;
 import java.util.Objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class StudentAnswerService {
 
@@ -122,5 +125,19 @@ public class StudentAnswerService {
         dto.setUserId(userDto.getId());
 
         return dto;
+    }
+
+    public List<StudentAnswerDTO> getStudentsAnswers(Long examId, String role){
+        if(!Objects.equals(role, "INSTRUCTOR")){
+            throw new RuntimeException("You have to be Instructor to view the answers" );
+        }
+        LOGGER.info("Attempting to view the answers: {}", examId);
+
+        List<StudentAnswer> studentAnswers= studentAnswerRepository.findAllByExamId(examId);
+        List<StudentAnswerDTO> studentAnswerDTOS= new ArrayList<>();
+        for (StudentAnswer ans : studentAnswers) {
+            studentAnswerDTOS.add(mapToDto(ans));
+        }
+        return studentAnswerDTOS;
     }
 }

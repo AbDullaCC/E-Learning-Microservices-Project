@@ -5,8 +5,9 @@ import micro.course_service.dtos.CourseDTO;
 import micro.course_service.dtos.CourseWithTeacherDTO;
 import micro.course_service.dtos.SessionDTO;
 import micro.course_service.dtos.UserDto;
-import micro.course_service.dtos.createDtos.CourseUserDTO;
 import micro.course_service.dtos.createDtos.CreateCourseDTO;
+import micro.course_service.dtos.createDtos.PaymentRequest;
+import micro.course_service.dtos.createDtos.PaymentResponse;
 import micro.course_service.entities.Course;
 import micro.course_service.entities.CourseUser;
 import micro.course_service.repositories.CourseRepository;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -98,7 +98,8 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    public void enroll(Long courseId, Long userId) {
+    @CircuitBreaker(name = "PAYMENT_SERVICE_CIRCUIT_BREAKER", fallbackMethod = "fallbackEnrollInCourse")
+    public ResponseEntity<PaymentResponse> enrollInCourse(Long courseId, Long userId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found with ID: " + courseId));
 
@@ -106,9 +107,34 @@ public class CourseService {
             throw new RuntimeException("User with ID " + userId + " is already enrolled in course with ID " + courseId);
         }
 
+        PaymentRequest paymentRequest = new PaymentRequest(userId, courseId, Double.parseDouble(course.getPrice().toString()));
+        ResponseEntity<PaymentResponse> response = restTemplate.postForEntity("http://payment-service/paymentService/api/payments/create",paymentRequest, PaymentResponse.class);
+        if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null)
+            return null;
+
         CourseUser courseUser = new CourseUser(course, userId);
         CourseUser savedCourseUser = courseUserRepository.save(courseUser);
 
-        return;
+        return ResponseEntity.ok(response.getBody());
+    }
+
+    public ResponseEntity<PaymentResponse> fallbackEnrollInCourse(Long courseId, Long userId, Throwable throwable){
+        return ResponseEntity.status(400).body(PaymentResponse()) ;
+    }
+
+    public List<CourseDTO> getEnrolledCoursesByUserId(Long userId) {
+        // Find all CourseUser enrollments for the given userId
+        List<CourseUser> enrollments = courseUserRepository.findByUserId(userId);
+
+        return enrollments.stream()
+                .map(CourseUser::getCourse) // Get the Course object from each CourseUser
+                .map(course -> new CourseDTO(
+                        course.getId(),
+                        course.getName(),
+                        course.getPrice(),
+                        course.getDescription(),
+                        SessionDTO.listToDTO(course.getSessions())
+                ))
+                .collect(Collectors.toList());
     }
 }

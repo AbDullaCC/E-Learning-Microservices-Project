@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("/api/exams")
 public class ExamController {
-
     @Autowired
     private ExamService examService;
+
     @GetMapping("/{id}")
     public ResponseEntity<ExamDTO> getExamById(@PathVariable Long id) {
         ExamDTO examDto = examService.getExamDetails(id);

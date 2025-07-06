@@ -1,5 +1,7 @@
 package micro.exam_service.controllers;
 
+import jakarta.validation.Valid;
+import micro.exam_service.dto.*;
 import micro.exam_service.dto.EvaluationDTO;
 import micro.exam_service.dto.SingleStudentAnswerDTO;
 import micro.exam_service.dto.StudentAnswerDTO;
@@ -10,13 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/answers")
 public class StudentAnswerController {
-
     @Autowired
     private StudentAnswerService studentAnswerService;
-
 
     @PostMapping
     public ResponseEntity<StudentAnswerDTO> submitAnswer(@RequestBody StudentAnswerRequestDTO answerDto , @RequestAttribute("userId") Long authenticatedUserId) {
@@ -39,5 +41,11 @@ public class StudentAnswerController {
 
         StudentAnswerDTO updatedAnswer = studentAnswerService.updateEvaluation(answerId, evaluationDto.getEvaluation() , role);
         return new ResponseEntity<>(updatedAnswer, HttpStatus.OK);
+    }
+
+    @GetMapping("/exam/{examId}")
+    public ResponseEntity<List<StudentAnswerDTO>> getAnswersForExamById(@PathVariable("examId") Long examId, @RequestAttribute("role") String role) {
+        List<StudentAnswerDTO> studentsAnswers = studentAnswerService.getStudentsAnswers(examId, role);
+        return new ResponseEntity<>(studentsAnswers, HttpStatus.CREATED);
     }
 }
