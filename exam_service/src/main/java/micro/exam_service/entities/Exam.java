@@ -1,16 +1,17 @@
 package micro.exam_service.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*; // Import Lombok annotations
 
 @Entity
 @Table(name = "exams")
+// Lombok Annotations
+@Getter                 // Generates all getter methods
+@Setter                 // Generates all setter methods
+@NoArgsConstructor      // Generates a no-argument constructor (required by JPA)
+@AllArgsConstructor     // Generates a constructor with all arguments
+@Builder                // The magic annotation that creates the Builder
 public class Exam {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,33 +21,4 @@ public class Exam {
 
     @Column(name = "questions", columnDefinition = "TEXT")
     private String questions;
-
-
-    public Exam() {
-        // Default
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(Long courseId) {
-        this.courseId = courseId;
-    }
-
-    public String getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(String questions) {
-        this.questions = questions;
-    }
 }

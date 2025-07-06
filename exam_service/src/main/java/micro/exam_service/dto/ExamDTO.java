@@ -2,7 +2,7 @@ package micro.exam_service.dto;
 
 public class ExamDTO {
     private Long id;
-    private CourseDTO course;
+    private CourseWithTeacherDTO course;
     private String questions;
 
     public Long getId() {
@@ -13,11 +13,11 @@ public class ExamDTO {
         this.id = id;
     }
 
-    public CourseDTO getCourse() {
+    public CourseWithTeacherDTO getCourse() {
         return course;
     }
 
-    public void setCourse(CourseDTO course) {
+    public void setCourse(CourseWithTeacherDTO course) {
         this.course = course;
     }
 

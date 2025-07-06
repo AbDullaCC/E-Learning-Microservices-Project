@@ -1,23 +1,20 @@
 package micro.exam_service.dto;
 
+import com.netflix.discovery.provider.Serializer;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+
+@Serializer
+@Data // Generates getters, setters, equals, hashCode, and toString
+@NoArgsConstructor // Generates a no-argument constructor
+@AllArgsConstructor // Generates a constructor with all fields
 public class CourseDTO {
     private Long id;
-    private String title;
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    private String name;
+    private BigDecimal price;
+    private String description;
+//    private List<SessionDTO> sessions;
 }

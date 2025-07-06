@@ -3,7 +3,7 @@ package micro.exam_service.dto;
 public class StudentAnswerDTO {
     private Long id;
     private Long examId; // We keep examId to link to the exam within this service
-    private UserDTO user; // Replaced userId with a full DTO
+    private Long userId; // Replaced userId with a full DTO
     private String answers;
     private String evaluation;
 
@@ -24,12 +24,12 @@ public class StudentAnswerDTO {
         this.examId = examId;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getAnswers() {
