@@ -1,0 +1,16 @@
+# application.yml
+resilience4j.circuitbreaker:
+  instances:
+    userServiceCircuitBreaker:
+      registerHealthIndicator: true
+      slidingWindowType: COUNT_BASED
+      slidingWindowSize: 10 # Number of calls to consider for failure rate calculation
+      failureRateThreshold: 50 # Percentage of failures to open the circuit
+      waitDurationInOpenState: 5s # Time the circuit stays open before half-opening
+      permittedNumberOfCallsInHalfOpenState: 3 # Number of calls allowed in half-open state
+      automaticTransitionFromOpenToHalfOpenEnabled: true # Automatically transition after waitDurationInOpenState
+      # You can also configure specific exceptions to ignore or record
+      # recordExceptions:
+      #   - org.springframework.web.client.ResourceAccessException # Example: network issues
+      # ignoreExceptions:
+      #   - com.example.courseservice.exception.UserNotFoundException # Example: business exceptions that shouldn't open the circuit

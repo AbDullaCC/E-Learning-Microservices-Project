@@ -1,5 +1,6 @@
 package micro.course_service.services;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import micro.course_service.dtos.CourseDTO;
 import micro.course_service.dtos.CourseWithTeacherDTO;
 import micro.course_service.dtos.UserDto;
@@ -21,13 +22,20 @@ public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
+    @CircuitBreaker(name = "USER_SERVICE_CIRCUIT_BREAKER", fallbackMethod = "fallbackGetCourseById")
     public CourseWithTeacherDTO getCourseById(Long id) {
         Course course = courseRepository.getById(id);
-        ResponseEntity<UserDto> response = restTemplate.getForEntity("http://user-service/userService/api/users/" + id, UserDto.class);
+        ResponseEntity<UserDto> response = restTemplate.getForEntity("http://user-service/userService/api/users/" + course.getUserId(), UserDto.class);
         if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null)
             return null;
-
         return new CourseWithTeacherDTO(id, course.getName(), course.getPrice(), course.getDescription(), response.getBody());
+    }
+
+
+
+    public CourseWithTeacherDTO fallbackGetCourseById(Long id, Throwable throwable){
+        Course course = courseRepository.getById(id);
+        return new CourseWithTeacherDTO(id, course.getName(), course.getPrice(), course.getDescription(), null);
     }
 
     public CourseDTO createCourse(CreateCourseDTO createCourseDTO, Long teacherId) {
