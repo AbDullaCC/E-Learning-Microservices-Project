@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class StudentAnswerService {
 
@@ -64,5 +67,14 @@ public class StudentAnswerService {
         dto.setUserId(userDto.getId());
 
         return dto;
+    }
+
+    public List<StudentAnswerDTO> getStudentsAnswers(Long examId){
+        List<StudentAnswer> studentAnswers= studentAnswerRepository.findAllByExamId(examId);
+        List<StudentAnswerDTO> studentAnswerDTOS= new ArrayList<>();
+        for (StudentAnswer ans : studentAnswers) {
+            studentAnswerDTOS.add(mapToDto(ans));
+        }
+        return studentAnswerDTOS;
     }
 }

@@ -13,9 +13,9 @@ import jakarta.validation.Valid; // <-- Add this import for validation
 @RestController
 @RequestMapping("/api/exams")
 public class ExamController {
-
     @Autowired
     private ExamService examService;
+
     @GetMapping("/{id}")
     public ResponseEntity<ExamDTO> getExamById(@PathVariable Long id) {
         ExamDTO examDto = examService.getExamDetails(id);
