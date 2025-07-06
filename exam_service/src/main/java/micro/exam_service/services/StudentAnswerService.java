@@ -1,6 +1,7 @@
 package micro.exam_service.services;
 
 import micro.exam_service.dto.StudentAnswerDTO;
+import micro.exam_service.dto.StudentAnswerRequestDTO;
 import micro.exam_service.dto.UserDTO;
 import micro.exam_service.entities.StudentAnswer;
 import micro.exam_service.repository.ExamRepository; // <-- 1. Import ExamRepository
@@ -8,6 +9,8 @@ import micro.exam_service.repository.StudentAnswerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +27,7 @@ public class StudentAnswerService {
         this.examRepository = examRepository;
     }
 
-    public StudentAnswerDTO saveAnswer(StudentAnswerDTO answerDto) {
+    public StudentAnswerDTO saveAnswer(StudentAnswerRequestDTO answerDto, Long authenticatedUserId) {
         Long examId = answerDto.getExamId();
         LOGGER.info("Attempting to save answer for exam ID: {}", examId);
         if (!examRepository.existsById(examId)) {
@@ -32,7 +35,7 @@ public class StudentAnswerService {
         }
         StudentAnswer newAnswer = StudentAnswer.builder()
                 .examId(examId)
-                .userId(answerDto.getUserId())
+                .userId(authenticatedUserId)
                 .answers(answerDto.getAnswers())
                 .build();
 
@@ -41,7 +44,12 @@ public class StudentAnswerService {
         return mapToDto(savedAnswer);
     }
 
-    public StudentAnswerDTO updateEvaluation(Long answerId, String evaluation) {
+    public StudentAnswerDTO updateEvaluation(Long answerId, String evaluation , String role) {
+        System.out.println("the current role is "+role);
+        if(!Objects.equals(role, "INSTRUCTOR")){
+            System.out.println("we are here");
+           throw new RuntimeException("You have to be Instructor to update evaluation " );
+        }
         LOGGER.info("Attempting to update evaluation for answer ID: {}", answerId);
 
         StudentAnswer answer = studentAnswerRepository.findById(answerId)
