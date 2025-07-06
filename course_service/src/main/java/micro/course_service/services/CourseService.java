@@ -60,7 +60,6 @@ public class CourseService {
         if(!Objects.equals(role, "INSTRUCTOR")){
             throw new RuntimeException("You have to be Instructor to create a course" );
         }
-        LOGGER.info("Attempting to create a course");
 
         // Convert DTO to Entity
         Course course = new Course(
@@ -96,7 +95,10 @@ public class CourseService {
                 .collect(Collectors.toList());
     }
 
-    public List<CourseDTO> getPendingCourses() {
+    public List<CourseDTO> getPendingCourses(String role) {
+        if(!Objects.equals(role, "ADMIN")){
+            throw new RuntimeException("You have to be Admin to view pending courses");
+        }
         List<Course> courses = courseRepository.findByStatus("pending");
         return courses.stream()
                 .map(course -> new CourseDTO(
