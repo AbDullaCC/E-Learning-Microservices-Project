@@ -27,8 +27,8 @@ public class SessionController {
      * @return ResponseEntity with the created SessionDTO and HTTP status 201 (Created).
      */
     @PostMapping
-    public ResponseEntity<SessionDTO> createSession(@Valid @RequestBody CreateSessionDTO createSessionDTO) {
-        SessionDTO createdSession = sessionService.createSession(createSessionDTO);
+    public ResponseEntity<SessionDTO> createSession(@Valid @RequestBody CreateSessionDTO createSessionDTO, @RequestAttribute("role") String role, @RequestAttribute("userId") Long userId) {
+        SessionDTO createdSession = sessionService.createSession(createSessionDTO, userId, role);
         return new ResponseEntity<>(createdSession, HttpStatus.CREATED);
     }
 

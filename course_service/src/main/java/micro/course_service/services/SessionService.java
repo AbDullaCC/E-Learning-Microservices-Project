@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -24,10 +25,17 @@ public class SessionService { // Renamed from SessionServiceImpl
     private final SessionRepository sessionRepository;
     private final CourseRepository courseRepository;
 
-    public SessionDTO createSession(CreateSessionDTO createSessionDTO) {
+    public SessionDTO createSession(CreateSessionDTO createSessionDTO, Long userId, String role) {
+        if(!Objects.equals(role, "INSTRUCTOR")){
+            throw new RuntimeException("You have to be Instructor to create a session");
+        }
 
         Course course = courseRepository.findById(createSessionDTO.getCourseId())
                 .orElseThrow(() -> new RuntimeException("Course not found with ID: " + createSessionDTO.getCourseId()));
+
+        if(!Objects.equals(userId, course.getUserId())){
+            throw new RuntimeException("You have to be the Instructor of the course to create a session");
+        }
 
         Session session = new Session();
         session.setCourse(course);
