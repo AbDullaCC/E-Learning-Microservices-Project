@@ -17,5 +17,5 @@ public class CourseDTO {
     private String name;
     private BigDecimal price;
     private String description;
-//    private List<SessionDTO> sessions;
+    private List<SessionDTO> sessions;
 }
