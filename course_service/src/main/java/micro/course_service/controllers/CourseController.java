@@ -1,10 +1,10 @@
 package micro.course_service.controllers;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.validation.Valid;
 import micro.course_service.dtos.CourseDTO;
 import micro.course_service.dtos.CourseWithTeacherDTO;
 import micro.course_service.dtos.createDtos.CreateCourseDTO;
+import micro.course_service.dtos.createDtos.PaymentResponse;
 import micro.course_service.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,11 +46,17 @@ public class CourseController {
     }
 
     @PostMapping("/enroll/{courseId}")
-    public ResponseEntity<String> enrollInCourse(
+    public ResponseEntity<PaymentResponse> enrollInCourse(
             @PathVariable Long courseId
+//            @RequestHeader String token,
 //            @RequestAttribute("userId") Long userId
     ){
-        courseService.enroll(courseId, 1L);
-        return ResponseEntity.ok("Enrolled successfully");
+        return courseService.enrollInCourse(courseId, 1L);
+
+    }
+
+    @GetMapping("/enrolled")
+    public ResponseEntity<List<CourseDTO>> getEnrolledCourses() {
+        return ResponseEntity.ok(courseService.getEnrolledCoursesByUserId(1L));
     }
 }
