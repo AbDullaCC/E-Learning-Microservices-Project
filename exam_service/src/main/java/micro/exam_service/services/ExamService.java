@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException; // <-- Add this import
+import java.util.List;
+import java.util.Collections;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import java.util.Optional;
 
@@ -50,19 +54,20 @@ public class ExamService {
 
 
     @CircuitBreaker(name = COURSE_SERVICE_BREAKER, fallbackMethod = "createExamFallback")
-    public ExamDTO createExam(CreateExamRequestDTO requestDto) {
+    public ExamDTO createExam(CreateExamRequestDTO requestDto , String role) {
         LOGGER.info("Attempting to create exam for course id: {}", requestDto.getCourseId());
+        System.out.println("the current role is "+role);
+        if(!Objects.equals(role, "INSTRUCTOR")){
+            System.out.println("we are here");
+            throw new RuntimeException("You have to be Instructor to create exam" );
+        }
         CourseWithTeacherDTO courseDto;
         try {
             String courseServiceUrl = "http://course-service/courseService/api/courses/" + requestDto.getCourseId();
             ResponseEntity<CourseWithTeacherDTO> response = restTemplate.getForEntity(courseServiceUrl, CourseWithTeacherDTO.class);
             courseDto = response.getBody();
 
-            if (courseDto == null) {
-                throw new RuntimeException("Course service returned an empty body for course ID: " + requestDto.getCourseId());
-            }
-
-        } catch (HttpClientErrorException.NotFound ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(" Course not found with ID: " + requestDto.getCourseId());
         }
         Exam newExam = Exam.builder()
@@ -72,6 +77,31 @@ public class ExamService {
         Exam savedExam = examRepository.save(newExam);
         return buildExamDTO(savedExam, courseDto);
     }
+
+    @CircuitBreaker(name = COURSE_SERVICE_BREAKER, fallbackMethod = "getExamsByCourseFallback")
+    public List<ExamDTO> getExamsByCourse(Long courseId ) {
+        LOGGER.info("Attempting to get all exams for course ID: {}", courseId);
+
+        String courseServiceUrl = "http://course-service/courseService/api/courses/" + courseId;
+        ResponseEntity<CourseWithTeacherDTO> response = restTemplate.getForEntity(courseServiceUrl, CourseWithTeacherDTO.class);
+
+        if (response.getBody() == null) {
+            throw new RuntimeException("Course not found with ID: " + courseId);
+        }
+        CourseWithTeacherDTO courseDto = response.getBody();
+
+        List<Exam> exams = examRepository.findByCourseId(courseId);
+
+        return exams.stream()
+                .map(exam -> buildExamDTO(exam, courseDto))
+                .collect(Collectors.toList());
+    }
+
+    public List<ExamDTO> getExamsByCourseFallback(Long courseId, Throwable t) {
+        LOGGER.warn("FALLBACK: Could not fetch exams for course ID: {}. Reason: {}", courseId, t.getMessage());
+        return Collections.emptyList();
+    }
+
     public ExamDTO getExamDetailsFallback(Long id, Throwable t) {
         LOGGER.warn("FALLBACK: Could not get details for exam id: {}. Reason: {}", id, t.getMessage());
         Exam exam = examRepository.findById(id)
