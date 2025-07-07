@@ -56,7 +56,7 @@ public class CourseController {
     }
 
     @GetMapping("/enrolled")
-    public ResponseEntity<List<CourseDTO>> getEnrolledCourses() {
-        return ResponseEntity.ok(courseService.getEnrolledCoursesByUserId(1L));
+    public ResponseEntity<List<CourseDTO>> getEnrolledCourses(@RequestAttribute("userId") Long userId) {
+        return ResponseEntity.ok(courseService.getEnrolledCoursesByUserId(userId));
     }
 }
